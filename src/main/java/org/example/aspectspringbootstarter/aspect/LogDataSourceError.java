@@ -7,7 +7,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.example.aspectspringbootstarter.repository.DataSourceErrorLogRepositorySaver;
-import org.example.aspectspringbootstarter.pojo.DataSourceErrorLog;
+import org.example.aspectspringbootstarter.pojo.DataSourceErrorLogPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -49,7 +49,7 @@ public class LogDataSourceError {
     }
 
     public void saveException(ProceedingJoinPoint joinPoint, Exception e) {
-        DataSourceErrorLog errorLog = new DataSourceErrorLog();
+        DataSourceErrorLogPojo errorLog = new DataSourceErrorLogPojo();
 
         try {
             errorLog.setErrorMessage(e.getMessage());//сообщение об ошибке message в бд
@@ -68,7 +68,7 @@ public class LogDataSourceError {
             methodInfo.put("entityType", entityType(signature));
             errorLog.setMethodSignature(objectMapper.writeValueAsString(methodInfo));// to json
 
-            repository.save(errorLog);
+            repository.saveError(errorLog);
 
             log.error("Method exception {}.{}: {}",
                     signature.getDeclaringTypeName(),//имя класса

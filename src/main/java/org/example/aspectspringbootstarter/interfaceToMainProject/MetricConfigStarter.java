@@ -1,6 +1,6 @@
 package org.example.aspectspringbootstarter.interfaceToMainProject;
 
-public interface MetricConfig {
+public interface MetricConfigStarter {
     public long getTimeLimit();
 
 }

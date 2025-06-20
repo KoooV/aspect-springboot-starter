@@ -1,7 +1,7 @@
 package org.example.aspectspringbootstarter.repository;
 
-import org.example.aspectspringbootstarter.pojo.DataSourceErrorLog;
+import org.example.aspectspringbootstarter.pojo.DataSourceErrorLogPojo;
 
 public interface DataSourceErrorLogRepositorySaver {
-    void save(DataSourceErrorLog errorLog);
+    void saveError(DataSourceErrorLogPojo errorLog);
 }

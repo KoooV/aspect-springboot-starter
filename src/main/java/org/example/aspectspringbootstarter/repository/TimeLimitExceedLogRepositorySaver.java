@@ -1,7 +1,7 @@
 package org.example.aspectspringbootstarter.repository;
 
-import org.example.aspectspringbootstarter.pojo.TimeLimitExceedLog;
+import org.example.aspectspringbootstarter.pojo.TimeLimitExceedLogPojo;
 
 public interface TimeLimitExceedLogRepositorySaver {
-    void save(TimeLimitExceedLog errorLog);
+    void saveLimit(TimeLimitExceedLogPojo errorLog);
 }

@@ -1,6 +1,6 @@
 package org.example.aspectspringbootstarter.pojo;
 
-public class DataSourceErrorLog {
+public class DataSourceErrorLogPojo {
     private String errorMessage;
     private String stackTrace;
     private String methodSignature;
@@ -17,7 +17,15 @@ public class DataSourceErrorLog {
         this.methodSignature = methodSignature;
     }
 
+    public String getErrorMessage() {
+        return this.errorMessage;
+    }
 
+    public String getStackTrace() {
+        return this.stackTrace;
+    }
 
-
+    public String getMethodSignature() {
+        return this.methodSignature;
+    }
 }

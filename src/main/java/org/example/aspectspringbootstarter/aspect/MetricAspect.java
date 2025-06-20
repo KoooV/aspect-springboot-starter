@@ -7,8 +7,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.example.aspectspringbootstarter.interfaceToMainProject.MetricConfig;
-import org.example.aspectspringbootstarter.pojo.TimeLimitExceedLog;
+import org.example.aspectspringbootstarter.interfaceToMainProject.MetricConfigStarter;
+import org.example.aspectspringbootstarter.pojo.TimeLimitExceedLogPojo;
 import org.example.aspectspringbootstarter.repository.TimeLimitExceedLogRepositorySaver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ public class MetricAspect {
     private final Logger log = LoggerFactory.getLogger(MetricAspect.class);
     private final ObjectMapper objectMapper;
     private final TimeLimitExceedLogRepositorySaver repository;
-    private final MetricConfig config;
+    private final MetricConfigStarter config;
     private static final String METRIC_TOPIC = "metrics-topic";
 
     @Around("@annotation(org.example.aspectspringbootstarter.annotation.Metric)")
@@ -53,7 +53,7 @@ public class MetricAspect {
     }
 
     public void saveToDB(MethodSignature signature){
-        TimeLimitExceedLog errorLog = new TimeLimitExceedLog();
+        TimeLimitExceedLogPojo errorLog = new TimeLimitExceedLogPojo();
         try {
             Map<String, Object> methodInfo = new HashMap();
             methodInfo.put("className", signature.getDeclaringTypeName());//название класса
@@ -61,7 +61,7 @@ public class MetricAspect {
             methodInfo.put("parameterName", signature.getParameterNames());// название параметров метода
             methodInfo.put("parameterTypes", signature.getParameterTypes());// типы параметров
             errorLog.setError(objectMapper.writeValueAsString(methodInfo));// конвертация в json
-            repository.save(errorLog);
+            repository.saveLimit(errorLog);
         }catch(Exception ex){
             log.error("Couldn't convert to JSON or DB error{}", ex.getMessage());
 
@@ -69,7 +69,7 @@ public class MetricAspect {
     }
 
     public void sendToKafka(MethodSignature signature,long methodTotalTime ) throws JsonProcessingException {
-        TimeLimitExceedLog metricLog = new TimeLimitExceedLog();
+        TimeLimitExceedLogPojo metricLog = new TimeLimitExceedLogPojo();
             Map<String, Object> metricInfo = new HashMap();
             metricInfo.put("className", signature.getDeclaringTypeName());//название класса
             metricInfo.put("methodName", signature.getName());// название метода
